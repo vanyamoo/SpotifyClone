@@ -29,6 +29,11 @@ struct DatabaseHelper {
         let users = try JSONDecoder().decode(UserArray.self, from: data)
         return users.users
     }
+    
+    func getRecentlyViewed() async throws -> [Product] {
+        let allProducts = try await getProducts()
+        return Array(allProducts.prefix(upTo: 8))
+    }
 }
 
 
