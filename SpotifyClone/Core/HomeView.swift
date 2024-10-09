@@ -15,8 +15,23 @@ struct HomeView: View {
     
     var body: some View {
         ZStack {
-            Color.red.ignoresSafeArea()
-            header
+            Color.spotifyBlack.ignoresSafeArea()
+            ScrollView {
+                LazyVStack(spacing: 10, pinnedViews: [.sectionHeaders], content: {
+                    Section(content: {
+                        ForEach(0..<20) { _ in
+                            Rectangle()
+                                .fill(.red)
+                                .frame(width: 200, height: 200)
+                        }
+                        
+                    }, header: { header })
+                    
+                })
+                .padding(.top)
+            }
+            .scrollIndicators(.hidden)
+            .clipped()
         }
         .task {
             await getData()
@@ -37,6 +52,9 @@ struct HomeView: View {
             user
             categories
         }
+        .padding(.vertical)
+        .padding(.leading)
+        .background(.spotifyBlack)
     }
     
     private var user: some View {
