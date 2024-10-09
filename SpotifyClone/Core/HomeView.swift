@@ -15,32 +15,8 @@ struct HomeView: View {
     
     var body: some View {
         ZStack {
-            //Color.spotifyBlack.ignoresSafeArea()
-            HStack {
-                if let currentUser {
-                    ImageLoaderView(urlString: currentUser.image)
-                        .frame(width: 30, height: 30)
-                        .background(.spotifyWhite)
-                        .clipShape(Circle())
-                        .onTapGesture {
-                            //
-                        }
-                }
-                
-                
-                ScrollView(.horizontal) {
-                    HStack(spacing: 8) {
-                        ForEach(Category.allCases, id: \.self) { category in
-                            CategoryCell(title: category.rawValue.capitalized, isSelected: category == selectedCategory)
-                                .onTapGesture {
-                                    selectedCategory = category
-                                }
-                        
-                        }
-                        
-                    }
-                }
-            }
+            Color.red.ignoresSafeArea()
+            header
         }
         .task {
             await getData()
@@ -53,6 +29,41 @@ struct HomeView: View {
             //products = try await DatabaseHelper().getProducts()
         } catch {
             
+        }
+    }
+    
+    private var header: some View {
+        HStack(spacing: 0) {
+            user
+            categories
+        }
+    }
+    
+    private var user: some View {
+        ZStack {
+            if let currentUser {
+                ImageLoaderView(urlString: currentUser.image)
+                    .background(.spotifyWhite)
+                    .clipShape(Circle())
+                    .onTapGesture {
+                        //
+                    }
+            }
+        }
+        .frame(width: 35, height: 35)
+    }
+    
+    private var categories: some View {
+        ScrollView(.horizontal) {
+            HStack(spacing: 8) {
+                ForEach(Category.allCases, id: \.self) { category in
+                    CategoryCell(title: category.rawValue.capitalized, isSelected: category == selectedCategory)
+                        .onTapGesture {
+                            selectedCategory = category
+                        }
+                }
+            }
+            .padding(.horizontal, 16)
         }
     }
 }

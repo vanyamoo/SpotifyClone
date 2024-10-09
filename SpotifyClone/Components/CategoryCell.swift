@@ -9,12 +9,13 @@ import SwiftUI
 
 struct CategoryCell: View {
     
-    var title = "Music"
+    var title = "All"
     var isSelected = false
     
     var body: some View {
         Text(title)
             .font(.callout)
+            .frame(minWidth: 35)
             .padding(.vertical, 8)
             .padding(.horizontal, 10)
             .background(isSelected ? .spotifyGreen : .spotifyDarkGray)
