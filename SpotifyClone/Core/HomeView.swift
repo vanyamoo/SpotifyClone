@@ -25,8 +25,22 @@ struct HomeView: View {
         }
     }
     
+    @ViewBuilder
     var newReleaseSection: some View {
-        NewReleaseCell()
+        if let product = recentlyViewed?.first {
+            NewReleaseCell(
+                imageName: product.firstImage,
+                headline: product.title,
+                subheadline: product.description,
+                title: product.title,
+                subtitle: product.description) {
+                    //
+                } onPlayPressed: {
+                    //
+                }
+
+        }
+        
     }
     
     var body: some View {
@@ -36,7 +50,7 @@ struct HomeView: View {
                 LazyVStack(spacing: 10, pinnedViews: [.sectionHeaders], content: {
 
                     Section(content: {
-                        VStack {
+                        VStack(spacing:16) {
                             recentsSection
                             
                             newReleaseSection
