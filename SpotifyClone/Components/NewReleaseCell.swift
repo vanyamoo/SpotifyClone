@@ -82,12 +82,14 @@ struct NewReleaseCell: View {
             newReleaseButtons
         }
         .padding(.trailing)
+        .padding(.vertical)
     }
     
     @ViewBuilder
     private var titleText: some View {
         if let title {
             Text(title)
+                .lineLimit(2)
                 .fontWeight(.semibold)
         }
     }

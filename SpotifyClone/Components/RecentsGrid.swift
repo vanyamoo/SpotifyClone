@@ -21,16 +21,16 @@ struct RecentsGrid<Item, ItemView>: View where ItemView: View {
     }
     
     var body: some View {
-        Grid(horizontalSpacing: 0, verticalSpacing: 0) {
+        Grid() {  // Grid(horizontalSpacing: 8, verticalSpacing: 8) {
             ForEach(0..<rows, id: \.self) { row in  // rows
                 GridRow {
                     ForEach(0..<columns, id: \.self) { col in // cells
                             content(items[columns * row + col])
-                                .padding(4)
+                                //.padding(4)
                     }
                 }
             }
         }
-        .padding(6)
+        //.padding(6)
     }
 }

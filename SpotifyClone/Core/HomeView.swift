@@ -6,18 +6,19 @@
 //
 
 import SwiftUI
-import SwiftfulUI
+//import SwiftfulUI
 
 struct HomeView: View {
     
     @State private var currentUser: User?
     @State private var selectedCategory: Category?
-    
+    @State private var products: [Product] = []
     @State private var recentlyViewed: [Product]?
+    @State private var productRows: [ProductRow] = []
     
     
     @ViewBuilder
-    var recentsSection: some View {
+    private var recentsSection: some View {
         if let items = recentlyViewed {
             RecentsGrid(items: items) { item in
                 RecentlyViewedCell(title: item.title, imageName: item.firstImage)
@@ -26,7 +27,7 @@ struct HomeView: View {
     }
     
     @ViewBuilder
-    var newReleaseSection: some View {
+    private var newReleaseSection: some View {
         if let product = recentlyViewed?.first {
             NewReleaseCell(
                 imageName: product.firstImage,
@@ -34,13 +35,32 @@ struct HomeView: View {
                 subheadline: product.description,
                 title: product.title,
                 subtitle: product.description) {
-                    //
+                    print("onAddToPlaylistPressed")
                 } onPlayPressed: {
-                    //
+                    print("onPlayPressed")
                 }
-
         }
-        
+    }
+    
+    private var listRows: some View {
+        ForEach(productRows) { row in
+            VStack {
+                Text(row.title)
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.spotifyWhite)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                ScrollView(.horizontal) {
+                    HStack(alignment: .top, spacing: 16) {
+                        ForEach(row.products) { product in
+                            ImageTitleRowCell(imageName: product.firstImage, procuctTitle: product.title, imageSize: 120)
+                        }
+                    }
+                    .padding(.horizontal)
+                }
+                .scrollIndicators(.hidden)
+            }
+        }
     }
     
     var body: some View {
@@ -52,16 +72,11 @@ struct HomeView: View {
                     Section(content: {
                         VStack(spacing:16) {
                             recentsSection
-                            
+                                .padding(.horizontal)
                             newReleaseSection
-                            
-                            ForEach(0..<20) { _ in
-                                Rectangle()
-                                    .fill(.red)
-                                    .frame(width: 200, height: 200)
-                            }
+                                .padding(.horizontal)
+                            listRows
                         }
-                        
                         
                     }, header: { header })
                     
@@ -80,12 +95,24 @@ struct HomeView: View {
     
     private func getData() async {
         do {
+            
             currentUser = try await DatabaseHelper().getUsers().first
-            let products = try await DatabaseHelper().getProducts()
             
-            recentlyViewed = Array(products.prefix(upTo: 8))
+            products = try await DatabaseHelper().getProducts()
+            print("test")
+            //if products.count >= 8 {
+                recentlyViewed = Array(products.prefix(upTo: 8))
+            //}
+            print(products.count)
+            var rows: [ProductRow] = []
+            let allBrands = Set(products.map({ $0.brand ?? "Brand goes here"})) // Set so we
+            for brand in allBrands {
+                //let products = products.filter({ $0.brand == brand })
+                rows.append(ProductRow(title: brand, products: products))
+            }
+            productRows = rows
         } catch {
-            
+            print(error.localizedDescription)
         }
     }
     
