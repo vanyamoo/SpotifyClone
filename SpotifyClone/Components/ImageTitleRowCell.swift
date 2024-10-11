@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ImageTitleRowCell: View {
     var imageName = Constants.randomImage
-    var procuctTitle: String = "Some Item Name"
+    var productTitle: String = "Some Item Name"
     var imageSize: CGFloat = 100
     
     var body: some View {
@@ -17,7 +17,7 @@ struct ImageTitleRowCell: View {
             ImageLoaderView(urlString: imageName)
                 .frame(width: imageSize, height: imageSize)
             
-            Text(procuctTitle)
+            Text(productTitle)
                 .font(.callout)
                 .foregroundStyle(.spotifyLightGray)
                 .lineLimit(2)

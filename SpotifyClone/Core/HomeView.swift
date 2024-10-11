@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-//import SwiftfulUI
+import SwiftfulUI
 
 struct HomeView: View {
     
@@ -22,6 +22,9 @@ struct HomeView: View {
         if let items = recentlyViewed {
             RecentsGrid(items: items) { item in
                 RecentlyViewedCell(title: item.title, imageName: item.firstImage)
+                    .asButton(.press) {
+                        //
+                    }
             }
         }
     }
@@ -53,7 +56,10 @@ struct HomeView: View {
                 ScrollView(.horizontal) {
                     HStack(alignment: .top, spacing: 16) {
                         ForEach(row.products) { product in
-                            ImageTitleRowCell(imageName: product.firstImage, procuctTitle: product.title, imageSize: 120)
+                            ImageTitleRowCell(imageName: product.firstImage, productTitle: product.title, imageSize: 120)
+                                .asButton(.press) {
+                                    //
+                                }
                         }
                     }
                     .padding(.horizontal)
@@ -95,11 +101,8 @@ struct HomeView: View {
     
     private func getData() async {
         do {
-            
             currentUser = try await DatabaseHelper().getUsers().first
-            
             products = try await DatabaseHelper().getProducts()
-            print("test")
             //if products.count >= 8 {
                 recentlyViewed = Array(products.prefix(upTo: 8))
             //}
