@@ -10,7 +10,8 @@ import SwiftUI
 struct SpotifyPlaylistView: View {
     
     var product: Product = .mock
-    var user: User = .mock
+    @State private var user: User = .mock
+    @State private var products: [Product] = []
     
     var body: some View {
         ZStack {
@@ -21,7 +22,7 @@ struct SpotifyPlaylistView: View {
                     PlaylistHeaderCell(
                         height: 250,
                         title: product.title,
-                        subtitle: product.description,
+                        subtitle: product.brand ?? "",
                         imageName: product.firstImage
                     )
                     
@@ -32,14 +33,41 @@ struct SpotifyPlaylistView: View {
                         onAddToPlaylistPressed: nil,
                         onDownloadPressed: nil,
                         onSharePressed: nil,
-                        onEllipsisPressedPressed: nil,
+                        onEllipsisPressed: nil,
                         onShufflePressed: nil,
                         onPlayPressed: nil
                     )
                     .padding(.horizontal)
+                    
+                    ForEach(products) { product in
+                        SongRowCell(
+                            imageName: product.firstImage,
+                            imageSize: 65,
+                            title: product.title,
+                            subtitle: product.brand,
+                            onEllipsisPressed: {
+                                //
+                            },
+                            onCellPressed: nil
+                        )
+                        .padding(.leading)
+                    }
                 }
             }
             .scrollIndicators(.hidden)
+        }
+        .task {
+            await getAllSongsFromAlbum()
+        }
+        .toolbarVisibility(.hidden, for: .navigationBar)
+    }
+    
+    private func getAllSongsFromAlbum() async {
+        do {
+            user = try await DatabaseHelper().getUsers().first ?? .mock
+            products = try await DatabaseHelper().getProducts()
+        } catch {
+            print(error.localizedDescription)
         }
     }
 }

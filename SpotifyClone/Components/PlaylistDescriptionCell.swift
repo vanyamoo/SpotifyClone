@@ -15,7 +15,7 @@ struct PlaylistDescriptionCell: View {
     var onAddToPlaylistPressed: (() -> Void)?
     var onDownloadPressed: (() -> Void)?
     var onSharePressed: (() -> Void)?
-    var onEllipsisPressedPressed: (() -> Void)?
+    var onEllipsisPressed: (() -> Void)?
     var onShufflePressed: (() -> Void)?
     var onPlayPressed: (() -> Void)?
     

@@ -119,9 +119,6 @@ struct NewReleaseCell: View {
             Image(systemName: "play.circle.fill")
                 .foregroundStyle(.spotifyWhite)
                 .font(.title)
-                //.onTapGesture {
-                //
-                //}
         }
     }
 }

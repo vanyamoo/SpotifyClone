@@ -16,7 +16,6 @@ struct RecentlyViewedCell: View {
         HStack(spacing: 16) {
             ImageLoaderView(urlString: imageName)
                 .frame(width: 55, height: 55)
-                //.background(.spotifyWhite)
             
             Text(title)
                 .font(.callout)
