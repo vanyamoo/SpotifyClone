@@ -67,35 +67,38 @@ struct SpotifyPlaylistView: View {
             }
             .scrollIndicators(.hidden)
             
-            ZStack {
-                Text(product.title)
-                    .font(.headline)
-                    .padding(.vertical, 20)
-                    .frame(maxWidth: .infinity)
-                    .background(Color.spotifyBlack)
-                    .offset(y: showHeader ? 0 : -40)
-                    .opacity(showHeader ? 1 : 0)
-                
-                Image(systemName: "chevron.left")
-                    .font(.title3)
-                    .padding(10)
-                    .background(showHeader ? Color.black.opacity(0.001) : Color.spotifyGray.opacity(0.7))
-                    .clipShape(Circle())
-                    .onTapGesture {
-                        //
-                    }
-                    .padding(.leading)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
+            header
             .foregroundStyle(.spotifyWhite)
             .animation(.smooth(duration: 0.2), value: showHeader)
-            
             .frame(maxHeight: .infinity, alignment: .top)
         }
         .task {
             await getAllSongsFromAlbum()
         }
         .toolbarVisibility(.hidden, for: .navigationBar)
+    }
+    
+    private var header: some View {
+        ZStack {
+            Text(product.title)
+                .font(.headline)
+                .padding(.vertical, 20)
+                .frame(maxWidth: .infinity)
+                .background(Color.spotifyBlack)
+                .offset(y: showHeader ? 0 : -40)
+                .opacity(showHeader ? 1 : 0)
+            
+            Image(systemName: "chevron.left")
+                .font(.title3)
+                .padding(10)
+                .background(showHeader ? Color.black.opacity(0.001) : Color.spotifyGray.opacity(0.7))
+                .clipShape(Circle())
+                .onTapGesture {
+                    //
+                }
+                .padding(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
     }
     
     private func getAllSongsFromAlbum() async {
