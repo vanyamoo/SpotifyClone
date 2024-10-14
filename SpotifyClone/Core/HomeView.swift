@@ -7,8 +7,11 @@
 
 import SwiftUI
 import SwiftfulUI
+import SwiftfulRouting
 
 struct HomeView: View {
+    
+    @Environment(\.router) var router
     
     @State private var currentUser: User?
     @State private var selectedCategory: Category?
@@ -23,9 +26,15 @@ struct HomeView: View {
             RecentsGrid(items: items) { item in
                 RecentlyViewedCell(title: item.title, imageName: item.firstImage)
                     .asButton(.press) {
-                        //
+                        goToPlaylistView(product: item)
                     }
             }
+        }
+    }
+    
+    private func goToPlaylistView(product: Product) {
+        router.showScreen(.push) { _ in
+            SpotifyPlaylistView(product: product)
         }
     }
     
@@ -40,7 +49,7 @@ struct HomeView: View {
                 subtitle: product.description) {
                     print("onAddToPlaylistPressed")
                 } onPlayPressed: {
-                    print("onPlayPressed")
+                    goToPlaylistView(product: product)
                 }
         }
     }
@@ -58,7 +67,7 @@ struct HomeView: View {
                         ForEach(row.products) { product in
                             ImageTitleRowCell(imageName: product.firstImage, productTitle: product.title, imageSize: 120)
                                 .asButton(.press) {
-                                    //
+                                    goToPlaylistView(product: product)
                                 }
                         }
                     }
@@ -100,6 +109,7 @@ struct HomeView: View {
     }
     
     private func getData() async {
+        guard products.isEmpty else { return }
         do {
             currentUser = try await DatabaseHelper().getUsers().first
             products = try await DatabaseHelper().getProducts()
@@ -159,5 +169,7 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
+    RouterView { _ in
+        HomeView()
+    }
 }

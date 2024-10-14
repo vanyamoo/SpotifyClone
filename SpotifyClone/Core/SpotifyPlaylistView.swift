@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import SwiftfulRouting
 
 struct SpotifyPlaylistView: View {
+    
+    @Environment(\.router) var router
     
     var product: Product = .mock
     @State private var user: User = .mock
@@ -59,7 +62,9 @@ struct SpotifyPlaylistView: View {
                             onEllipsisPressed: {
                                 //
                             },
-                            onCellPressed: nil
+                            onCellPressed: {
+                                goToPlaylistView(product: product)
+                            }
                         )
                         .padding(.leading)
                     }
@@ -78,6 +83,12 @@ struct SpotifyPlaylistView: View {
         .toolbarVisibility(.hidden, for: .navigationBar)
     }
     
+    private func goToPlaylistView(product: Product) {
+        router.showScreen(.push) { _ in
+            SpotifyPlaylistView(product: product)
+        }
+    }
+    
     private var header: some View {
         ZStack {
             Text(product.title)
@@ -94,7 +105,7 @@ struct SpotifyPlaylistView: View {
                 .background(showHeader ? Color.black.opacity(0.001) : Color.spotifyGray.opacity(0.7))
                 .clipShape(Circle())
                 .onTapGesture {
-                    //
+                    router.dismissScreen()
                 }
                 .padding(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -112,5 +123,7 @@ struct SpotifyPlaylistView: View {
 }
 
 #Preview {
-    SpotifyPlaylistView()
+    RouterView { _ in
+        SpotifyPlaylistView()
+    }
 }

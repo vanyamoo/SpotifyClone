@@ -6,12 +6,16 @@
 //
 
 import SwiftUI
+import SwiftfulRouting
 
 @main
 struct SpotifyCloneApp: App {
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            RouterView { _ in
+                HomeView()
+            }
+            
         }
     }
 }
